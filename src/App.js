@@ -38,7 +38,6 @@ class App extends Component {
 
   getPotentialBuyers() {
     axios.get("https://joes-autos.herokuapp.com/api/buyers").then(response =>{
-      console.log(response);
       toast.success("Success!");
       this.setState({buyersToDisplay: response.data})
     }).catch (()=>toast.error("Failed at fetching Buyers "))
@@ -57,13 +56,22 @@ class App extends Component {
   filterByMake() {
     let make = this.refs.selectedMake.value;
 
+    axios.get(`https://joes-autos.herokuapp.com/api/vehicles/`).then(response => {
+      console.log(response);
+      toast.success("success!");
+      this.setState({vehiclesToDisplay:response.data.filter(element => element.make === make)})
+    }).catch(()=>toast.error("failed!"))
     // axios (GET)
     // setState with response -> vehiclesToDisplay
   }
 
   filterByColor() {
     let color = this.refs.selectedColor.value;
-
+    
+    axios.get("https://joes-autos.herokuapp.com/api/vehicles/").then(response =>{
+    toast.success("success!");
+    this.setState({vehiclesToDisplay:response.data.filter(element => element.color === color)})
+    }).catch(()=>toast.error("failed"))
     // axios (GET)
     // setState with response -> vehiclesToDisplay
   }
@@ -100,11 +108,19 @@ class App extends Component {
       address: this.refs.address.value
     };
 
+  axios.post("https://joes-autos.herokuapp.com/api/buyers", newBuyer).then(response =>{
+    toast.success("success! Added buyer")
+    this.setState({buyersToDisplay: response.data.buyers})
+  }).catch(()=>toast.error("Failed!"))
     //axios (POST)
     // setState with response -> buyersToDisplay
   }
 
   deleteBuyer( id ) {
+    axios.delete(`https://joes-autos.herokuapp.com/api/buyers/${id}`).then(response =>{
+      toast.success("Success! Deleted Buyer")
+      this.setState({buyersToDisplay: response.data.buyers})
+    }).catch(()=>toast.error("Failed deleting buyer"))
     // axios (DELETE)
     //setState with response -> buyersToDisplay
   }
@@ -112,13 +128,19 @@ class App extends Component {
   nameSearch() {
     let searchLetters = this.refs.searchLetters.value;
 
+    axios.get("https://joes-autos.herokuapp.com/api/buyers").then(response =>{
+      console.log(response)
+      this.setState({buyersToDisplay: response.data.filter(element => element.name.includes(searchLetters))})
+    })
     // axios (GET)
     // setState with response -> buyersToDisplay
   }
 
   byYear() {
-    let year = this.refs.searchYear.value;
-
+    let myYear = this.refs.searchYear.value;
+    axios.get("https://joes-autos.herokuapp.com/api/vehicles").then(response=>{
+      this.setState({vehiclesToDisplay: response.data.filter(element=> element.year === +myYear)})
+    })
     // axios (GET)
     // setState with response -> vehiclesToDisplay
   }
