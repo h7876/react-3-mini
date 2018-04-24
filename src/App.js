@@ -29,17 +29,28 @@ class App extends Component {
   }
 
   getVehicles() {
-    // axios (GET)
+    axios.get("https://joes-autos.herokuapp.com/api/vehicles").then(results =>{
+      toast.success("Success!");
+      this.setState({vehiclesToDisplay: results.data})
+  }).catch (() =>toast.error("Failed at fetching Vehicles"))
     // setState with response -> vehiclesToDisplay
   }
 
   getPotentialBuyers() {
-    // axios (GET)
+    axios.get("https://joes-autos.herokuapp.com/api/buyers").then(response =>{
+      console.log(response);
+      toast.success("Success!");
+      this.setState({buyersToDisplay: response.data})
+    }).catch (()=>toast.error("Failed at fetching Buyers "))
     // setState with response -> buyersToDisplay
   }
 
   sellCar( id ) {
-    // axios (DELETE)
+    axios.delete(`https://joes-autos.herokuapp.com/api/vehicles/${id}`).then(response =>{
+      console.log(response);
+      toast.success("Success!");
+      this.setState({vehiclesToDisplay:response.data.vehicles})
+    }).catch (()=> toast.error("failed!"))
     // setState with response -> vehiclesToDisplay
   }
 
@@ -58,7 +69,10 @@ class App extends Component {
   }
 
   updatePrice( priceChange, id ) {
-    // axios (PUT)
+    axios.put(`https://joes-autos.herokuapp.com/api/vehicles/${id}/${priceChange}`).then(response =>{
+      toast.success("Success!");
+      this.setState({vehiclesToDisplay: response.data.vehicles})
+    }).catch(() => toast.error("failed!"))
     // setState with response -> vehiclesToDisplay
   }
 
@@ -71,7 +85,11 @@ class App extends Component {
       price: this.refs.price.value
     };
 
-    // axios (POST)
+    axios.post("https://joes-autos.herokuapp.com/api/vehicles", newCar).then(response =>{
+      toast.success("success!")
+      console.log(response)
+      this.setState({vehiclesToDisplay: response.data.vehicles})
+    }).catch(()=>toast.error("Failed"))
     // setState with response -> vehiclesToDisplay
   }
 
